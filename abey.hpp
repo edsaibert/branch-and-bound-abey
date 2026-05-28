@@ -17,7 +17,7 @@ typedef vector<Ofertas> Leilao;
 *
 *   Entrada: Número de produtos e número de ofertas
 *
-*   Saída: Um leilão de dimensões p X c. Devolve uma exceção se alguma dimensão for inválida
+*   Saída: Um leilão de dimensões p X c ou um leilão vazio caso alguma dimensão for inválida
 */
 Leilao abey_cria_leilao(int p, int c);
 
