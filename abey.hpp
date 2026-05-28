@@ -21,6 +21,8 @@ typedef vector<Ofertas> Leilao;
 */
 Leilao abey_cria_leilao(int p, int c);
 
+Ofertas abey_cria_ofertas(int qtd_ofertas);
+
 int abey_func_lim_prof();
 
 int abey_func_lim_upgrade();
