@@ -40,7 +40,7 @@ Ofertas abey_cria_ofertas(int qtd_ofertas);
 int abey_bound_prof(Leilao arremts, Leilao prods_pend);
 
 /*
-*   Função limitante proposta pelos alunos: \sum_{(i, j) \in A} o_{i, j} + \sum_{i = 1}^{p} o_{i, c}, onde c é o tam. de cada conj. de ofertas
+*   Função limitante proposta pelos alunos: \sum_{(i, j) \in A} o_{i, j} + \sum_{i = 1}^{p} o_{i, c}, onde c é o tam. dos conjs. de ofertas
 *   
 *   Entrada: Leilão dos arremates já feitos e um leilão com os produtos pendentes
 *
