@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 #include "abey.hpp"
 
 Ofertas abey_cria_ofertas(int qtd_ofertas) {
@@ -41,22 +42,38 @@ Leilao abey_cria_leilao(int p, int c) {
     return leilao; 
 }
 
-int abey_bound_prof(Leilao arremates, Leilao prods_pendentes) {
-    int soma_arremates = 0;
-    int max_prods_pendentes = 0;
-    int tam_prods_pendentes = prods_pendentes.size();
+int abey_bound_prof(Leilao arremts, Leilao prods_pend) {
+    int soma_arremts = 0;
+    int max_prods_pend = 0;
+    int tam_prods_pend = prods_pend.size();
 
-    for (const Ofertas &ofertas : arremates) {
-        for (const int &oferta : ofertas)
-            soma_arremates += oferta;
+    for (const Ofertas& ofertas : arremts) {
+        for (const int& oferta : ofertas)
+            soma_arremts += oferta;
     }
 
-    for (const Ofertas &ofertas : prods_pendentes) {
-        for (const int &oferta : ofertas) {
-            if (oferta > max_prods_pendentes)
-                max_prods_pendentes = oferta;
+    for (const Ofertas& ofertas : prods_pend) {
+        for (const int& oferta : ofertas) {
+            if (oferta > max_prods_pend)
+                max_prods_pend = oferta;
         }
     }
 
-    return soma_arremates + tam_prods_pendentes * max_prods_pendentes;
+    return soma_arremts + tam_prods_pend * max_prods_pend;
+}
+
+int abey_bound_upgrade(Leilao arremts, Leilao prods_pend) {
+    int soma_arremts = 0;
+    int soma_otimos = 0;
+
+    for (const Ofertas& ofertas : arremts) {
+        for (const int& oferta : ofertas)
+            soma_arremts += oferta;
+    }
+
+    for (const Ofertas& ofertas : prods_pend)
+        /* Pega o último de cada oferta (maior oferta) e acumula */
+        soma_otimos += *ofertas.rbegin();
+
+    return soma_arremts + soma_otimos;
 }

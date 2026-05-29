@@ -23,10 +23,11 @@ Leilao abey_cria_leilao(int p, int c);
 
 Ofertas abey_cria_ofertas(int qtd_ofertas);
 
-void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)());
+void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)(), vector<int>& res);
 
-int abey_bound_prof(Leilao arremates, Leilao prods_pendentes);
+int abey_bound_prof(Leilao arremts, Leilao prods_pend);
 
-int abey_bound_upgrade();
+/* Sugestão: \sum_{(i, j) \in A} o_{i, j} + \sum_{i = 1}^{p} o_{i, c} (soma dos arrematados com a soma dos maiores lances por linha) */
+int abey_bound_upgrade(Leilao arremts, Leilao prods_pend);
 
 #endif // __LEILAO__
