@@ -44,7 +44,7 @@ Leilao abey_cria_leilao(int p, int c) {
     return leilao; 
 }
 
-int abey_bound_prof(Leilao arremts, Leilao prods_pend) {
+int abey_bound_prof(const Leilao& arremts, const Leilao& prods_pend) {
     int soma_arremts = 0;
     int max_prods_pend = 0;
     int tam_prods_pend = prods_pend.size();
@@ -64,7 +64,7 @@ int abey_bound_prof(Leilao arremts, Leilao prods_pend) {
     return soma_arremts + tam_prods_pend * max_prods_pend;
 }
 
-int abey_bound_upgrade(Leilao arremts, Leilao prods_pend) {
+int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
     int soma_arremts = 0;
     int soma_otimos = 0;
 

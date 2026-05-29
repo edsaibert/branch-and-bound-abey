@@ -35,16 +35,16 @@ Ofertas abey_cria_ofertas(int qtd_ofertas);
 *
 *   Saída: Limitante superior para a configuração de leilões de arrematados e pendentes atual
 */
-int abey_bound_prof(Leilao arremts, Leilao prods_pend);
+int abey_bound_prof(const Leilao& arremts, const Leilao& prods_pend);
 
 /*
-*   Função limitante proposta pelos alunos: \sum_{(i, j) \in A} o_{i, j} + \sum_{i = 1}^{p} o_{i, c}, onde c é o tam. dos conjs. de ofertas
+*   Função limitante proposta pelos alunos: \sum_{(i, j) \in A} o_{i, j} + \sum_{i = k}^{p} o_{i, c}, tal que k \in P e c = \max\{x : x \in C\}
 *   
 *   Entrada: Leilão dos arremates já feitos e um leilão com os produtos pendentes
 *
 *   Saída: Limitante superior para a configuração de leilões de arrematados e pendentes atual
 */
-int abey_bound_upgrade(Leilao arremts, Leilao prods_pend);
+int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend);
 
 /*
 *   Faz branch-and-bound no leilão para obter o ganho máximo
@@ -54,6 +54,6 @@ int abey_bound_upgrade(Leilao arremts, Leilao prods_pend);
 *   Esperado: Em 'solucao' e 'ganho' estarão os clientes que formam os arremates necessários para se ter o ótimo, 
 *   e em 'ganho' estará o valor ótimo obtido por esses arremates
 */
-void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)(Leilao, Leilao), std::vector<int>& solucao, int& ganho);
+void abey_bnb_max_ganho(const Leilao& leilao, int l, int (*bound)(Leilao, Leilao), std::vector<int>& solucao, int& ganho);
 
 #endif // __LEILAO__
