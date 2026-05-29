@@ -4,11 +4,14 @@
 #include <vector>
 #include <set>
 
+/* Oferta da forma (i, j), onde i indexa um cliente e j representa o valor */
+typedef std::pair<int, int> Oferta;
+
 /* Conjunto de ofertas */
-typedef std::set<int> Ofertas;
+typedef std::set<Oferta> ConjuntoOfertas;
 
 /* Vetor de conjuntos de ofertas (leilão) */
-typedef std::vector<Ofertas> Leilao;
+typedef std::vector<ConjuntoOfertas> Leilao;
 
 /* 
 *   Cria um leilão com 'p' produtos e 'c' ofertas (1 p/ cliente)
@@ -26,7 +29,7 @@ Leilao abey_cria_leilao(int p, int c);
 *
 *   Saída: Um conjunto de ofertas
 */
-Ofertas abey_cria_ofertas(int qtd_ofertas);
+ConjuntoOfertas abey_cria_ofertas(int qtd_ofertas);
 
 /*
 *   Função limitante dada pelo professor: \sum_{(i, j) \in A} o_{i, j} + |P| \max\{o_{i, j} | i \in P, j \in C\}

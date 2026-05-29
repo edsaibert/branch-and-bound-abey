@@ -1,23 +1,22 @@
 #include <iostream>
-#include <iterator>
 #include "abey.hpp"
 
 using namespace std;
 
-Ofertas abey_cria_ofertas(int qtd_ofertas) {
+ConjuntoOfertas abey_cria_ofertas(int qtd_ofertas) {
     if (qtd_ofertas <= 0) {
         cerr << "[-] abey_cria_ofertas(): Qtd. inválida de ofertas\n";
 
         return {};
     }
 
-    Ofertas ofertas;
+    ConjuntoOfertas ofertas;
 
-    for (int j = 0; j < qtd_ofertas; j++) {
-        int oferta;
-        cin >> oferta;
+    for (int i = 0; i < qtd_ofertas; i++) {
+        int valor;
+        cin >> valor;
 
-        ofertas.insert(oferta);
+        ofertas.insert({i + 1, valor});
     }
 
     return ofertas;
@@ -33,7 +32,7 @@ Leilao abey_cria_leilao(int p, int c) {
     Leilao leilao;
 
     for (int i = 0; i < p; i++) {
-        Ofertas ofertas = abey_cria_ofertas(c);
+        ConjuntoOfertas ofertas = abey_cria_ofertas(c);
 
         if (ofertas.size() == 0)
             return {};
@@ -49,16 +48,14 @@ int abey_bound_prof(const Leilao& arremts, const Leilao& prods_pend) {
     int max_prods_pend = 0;
     int tam_prods_pend = prods_pend.size();
 
-    for (const Ofertas& ofertas : arremts) {
-        for (const int& oferta : ofertas)
-            soma_arremts += oferta;
+    for (const ConjuntoOfertas& conj_ofertas : arremts) {
+        for (const Oferta& oferta : conj_ofertas)
+            soma_arremts += oferta.second;
     }
 
-    for (const Ofertas& ofertas : prods_pend) {
-        for (const int& oferta : ofertas) {
-            if (oferta > max_prods_pend)
-                max_prods_pend = oferta;
-        }
+    for (const ConjuntoOfertas& ofertas : prods_pend) {
+        for (const Oferta& oferta : ofertas)
+            max_prods_pend = max(max_prods_pend, oferta.second);
     }
 
     return soma_arremts + tam_prods_pend * max_prods_pend;
@@ -68,15 +65,15 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
     int soma_arremts = 0;
     int soma_otimos = 0;
 
-    for (const Ofertas& ofertas : arremts) {
-        for (const int& oferta : ofertas)
-            soma_arremts += oferta;
+    for (const ConjuntoOfertas& ofertas : arremts) {
+        for (const Oferta& oferta : ofertas)
+            soma_arremts += oferta.second;
     }
 
-    for (const Ofertas& ofertas : prods_pend)
-        /* Pega o último de cada conj. de ofertas (maior oferta) e acumula */
-        /* GULOSO?!?! */
-        soma_otimos += *ofertas.rbegin();
+    for (const ConjuntoOfertas& ofertas : prods_pend)
+        /* Pega a última oferta de cada conj. de ofertas (maior oferta) e acumula */
+        /* MINDSET GULOSO?!?! */
+        soma_otimos += ofertas.rbegin()->second;
 
     return soma_arremts + soma_otimos;
 }
