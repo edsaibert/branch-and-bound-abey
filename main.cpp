@@ -2,6 +2,8 @@
 #include <string>
 #include "abey.hpp"
 
+using namespace std;
+
 int main(int argc, char* argv[]) {
     int p, c;
 

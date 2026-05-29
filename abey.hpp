@@ -4,13 +4,11 @@
 #include <vector>
 #include <set>
 
-using namespace std;
-
 /* Conjunto de ofertas */
-typedef set<int> Ofertas;
+typedef std::set<int> Ofertas;
 
 /* Vetor de conjuntos de ofertas (leilão) */
-typedef vector<Ofertas> Leilao;
+typedef std::vector<Ofertas> Leilao;
 
 /* 
 *   Cria um leilão com 'p' produtos e 'c' ofertas (1 p/ cliente)
@@ -56,6 +54,6 @@ int abey_bound_upgrade(Leilao arremts, Leilao prods_pend);
 *   Esperado: Em 'solucao' e 'ganho' estarão os clientes que formam os arremates necessários para se ter o ótimo, 
 *   e em 'ganho' estará o valor ótimo obtido por esses arremates
 */
-void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)(Leilao, Leilao), vector<int>& solucao, int& ganho);
+void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)(Leilao, Leilao), std::vector<int>& solucao, int& ganho);
 
 #endif // __LEILAO__

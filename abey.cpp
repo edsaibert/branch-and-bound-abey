@@ -2,6 +2,8 @@
 #include <iterator>
 #include "abey.hpp"
 
+using namespace std;
+
 Ofertas abey_cria_ofertas(int qtd_ofertas) {
     if (qtd_ofertas <= 0) {
         cerr << "[-] abey_cria_ofertas(): Qtd. inválida de ofertas\n";
