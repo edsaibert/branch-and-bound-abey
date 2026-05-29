@@ -72,7 +72,8 @@ int abey_bound_upgrade(Leilao arremts, Leilao prods_pend) {
     }
 
     for (const Ofertas& ofertas : prods_pend)
-        /* Pega o último de cada oferta (maior oferta) e acumula */
+        /* Pega o último de cada oferta (maior oferta) e acumula */]
+        /* GULOSO?!?! */
         soma_otimos += *ofertas.rbegin();
 
     return soma_arremts + soma_otimos;
