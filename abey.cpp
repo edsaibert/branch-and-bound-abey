@@ -16,7 +16,7 @@ ConjuntoOfertas abey_cria_ofertas(int qtd_ofertas) {
         int valor;
         cin >> valor;
 
-        ofertas.insert({i + 1, valor});
+        ofertas.insert({valor, i + 1});
     }
 
     return ofertas;
@@ -40,6 +40,14 @@ Leilao abey_cria_leilao(int p, int c) {
         leilao.push_back(ofertas);
     }
 
+    /* Teste */
+    for (const ConjuntoOfertas& conj_ofertas : leilao) {
+        for (const Oferta& oferta : conj_ofertas)
+            cout << oferta.first << " ";
+
+        cout << "\n";
+    }
+
     return leilao; 
 }
 
@@ -50,12 +58,12 @@ int abey_bound_prof(const Leilao& arremts, const Leilao& prods_pend) {
 
     for (const ConjuntoOfertas& conj_ofertas : arremts) {
         for (const Oferta& oferta : conj_ofertas)
-            soma_arremts += oferta.second;
+            soma_arremts += oferta.first;
     }
 
     for (const ConjuntoOfertas& ofertas : prods_pend) {
         for (const Oferta& oferta : ofertas)
-            max_prods_pend = max(max_prods_pend, oferta.second);
+            max_prods_pend = max(max_prods_pend, oferta.first);
     }
 
     return soma_arremts + tam_prods_pend * max_prods_pend;
@@ -67,13 +75,13 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
 
     for (const ConjuntoOfertas& ofertas : arremts) {
         for (const Oferta& oferta : ofertas)
-            soma_arremts += oferta.second;
+            soma_arremts += oferta.first;
     }
 
     for (const ConjuntoOfertas& ofertas : prods_pend)
         /* Pega a última oferta de cada conj. de ofertas (maior oferta) e acumula */
         /* MINDSET GULOSO?!?! */
-        soma_otimos += ofertas.rbegin()->second;
+        soma_otimos += ofertas.rbegin()->first;
 
     return soma_arremts + soma_otimos;
 }
