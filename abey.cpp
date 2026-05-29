@@ -38,13 +38,25 @@ Leilao abey_cria_leilao(int p, int c) {
         leilao.push_back(ofertas);
     }
 
-    /* Teste */
-    for (const auto &ofertas : leilao) {
-        for (const auto &oferta : ofertas)
-            cout << oferta << " ";
+    return leilao; 
+}
 
-        cout << "\n";
+int abey_bound_prof(Leilao arremates, Leilao prods_pendentes) {
+    int soma_arremates = 0;
+    int max_prods_pendentes = 0;
+    int tam_prods_pendentes = prods_pendentes.size();
+
+    for (const Ofertas &ofertas : arremates) {
+        for (const int &oferta : ofertas)
+            soma_arremates += oferta;
     }
 
-    return leilao; 
+    for (const Ofertas &ofertas : prods_pendentes) {
+        for (const int &oferta : ofertas) {
+            if (oferta > max_prods_pendentes)
+                max_prods_pendentes = oferta;
+        }
+    }
+
+    return soma_arremates + tam_prods_pendentes * max_prods_pendentes;
 }

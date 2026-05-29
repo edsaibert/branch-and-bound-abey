@@ -23,8 +23,10 @@ Leilao abey_cria_leilao(int p, int c);
 
 Ofertas abey_cria_ofertas(int qtd_ofertas);
 
-int abey_func_lim_prof();
+void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)());
 
-int abey_func_lim_upgrade();
+int abey_bound_prof(Leilao arremates, Leilao prods_pendentes);
+
+int abey_bound_upgrade();
 
 #endif // __LEILAO__
