@@ -21,13 +21,33 @@ typedef vector<Ofertas> Leilao;
 */
 Leilao abey_cria_leilao(int p, int c);
 
+/*
+*   Cria um conjunto de ofertas
+*   
+*   Entrada: Quantidade de ofertas a serem inseridas no conjunto
+*
+*   Saída: Um conjunto de ofertas
+*/
 Ofertas abey_cria_ofertas(int qtd_ofertas);
 
-void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)(Leilao, Leilao), vector<int>& opt_x, int& opt_p);
-
+/*
+*   Função limitante dada pelo professor: \sum_{(i, j) \in A} o_{i, j} + |P| \max\{o_{i, j} | i \in P, j \in C\}
+*
+*   Entrada: Leilão dos arremates já feitos e um leilão com os produtos pendentes
+*
+*   Saída: Limitante superior para a configuração de leilões de arrematados e pendentes atual
+*/
 int abey_bound_prof(Leilao arremts, Leilao prods_pend);
 
-/* Sugestão: \sum_{(i, j) \in A} o_{i, j} + \sum_{i = 1}^{p} o_{i, c} (soma dos arrematados com a soma dos maiores lances por linha) */
+/*
+*   Função limitante proposta pelos alunos: \sum_{(i, j) \in A} o_{i, j} + \sum_{i = 1}^{p} o_{i, c}, onde c é o tam. de cada conj. de ofertas
+*   
+*   Entrada: Leilão dos arremates já feitos e um leilão com os produtos pendentes
+*
+*   Saída: Limitante superior para a configuração de leilões de arrematados e pendentes atual
+*/
 int abey_bound_upgrade(Leilao arremts, Leilao prods_pend);
+
+void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)(Leilao, Leilao), vector<int>& solucao_otima, int& ganho_otimo);
 
 #endif // __LEILAO__
