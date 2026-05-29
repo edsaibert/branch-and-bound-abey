@@ -48,6 +48,14 @@ int abey_bound_prof(Leilao arremts, Leilao prods_pend);
 */
 int abey_bound_upgrade(Leilao arremts, Leilao prods_pend);
 
-void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)(Leilao, Leilao), vector<int>& solucao_otima, int& ganho_otimo);
+/*
+*   Faz branch-and-bound no leilão para obter o ganho máximo
+*   
+*   Entrada: Leilão, nível da recursão, ptr. para função limitante, ref. para vetor de solução e ref. para variável de ganho
+*
+*   Esperado: Em 'solucao' e 'ganho' estarão os clientes que formam os arremates necessários para se ter o ótimo, 
+*   e em 'ganho' estará o valor ótimo obtido por esses arremates
+*/
+void abey_bnb_max_ganho(Leilao leilao, int l, int (*bound)(Leilao, Leilao), vector<int>& solucao, int& ganho);
 
 #endif // __LEILAO__
