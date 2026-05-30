@@ -100,7 +100,7 @@ void abey_bnb_max_ganho(
     const Leilao &leilao,
     int l,
     int p,
-    int (*bound)(const Leilao&, const Leilao&),
+    int (&bound)(const Leilao&, const Leilao&),
     vector<int>& solucao,
     int& ganho_otimo
 ) {
