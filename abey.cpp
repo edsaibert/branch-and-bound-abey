@@ -4,6 +4,7 @@
 
 using namespace std;
 
+/* Cria um conjunto de ofertas (devolve conjunto vazio caso ocorra erro) */
 ConjuntoOfertas abey_cria_ofertas(int qtd_ofertas) {
     if (qtd_ofertas <= 0) {
         cerr << "[-] abey_cria_ofertas(): Qtd. inválida de ofertas\n";
@@ -87,6 +88,7 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
     return soma_arremts + soma_otimos;
 }
 
+/* Busca linear simples por um cliente de índice específico */
 bool abey_busca_cliente(vector<int>& solucao, int l, int idx_cliente) {
     for (int i = 0; i < l; i++) {
         if (solucao[i] == idx_cliente)
