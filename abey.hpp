@@ -23,15 +23,6 @@ typedef std::vector<ConjuntoOfertas> Leilao;
 Leilao abey_cria_leilao(int p, int c);
 
 /*
-*   Cria um conjunto de ofertas
-*   
-*   Entrada: Quantidade de ofertas a serem inseridas no conjunto
-*
-*   Saída: Um conjunto de ofertas
-*/
-ConjuntoOfertas abey_cria_ofertas(int qtd_ofertas);
-
-/*
 *   Função limitante dada pelo professor: \sum_{(i, j) \in A} o_{i, j} + |P| \max\{o_{i, j} | i \in P, j \in C\}
 *
 *   Entrada: Leilão dos arremates já feitos e um leilão com os produtos pendentes
@@ -48,15 +39,6 @@ int abey_bound_prof(const Leilao& arremts, const Leilao& prods_pend);
 *   Saída: Limitante superior para a configuração de leilões de arrematados e pendentes atual
 */
 int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend);
-
-/*
-*   Checa se o cliente indexado por 'idx_cliente' está em uma solução
-*
-*   Entrada: Solução, nível da recursão e índice do cliente
-*
-*   Saída: true se o cliente existir na solução e false caso contrário
-*/
-bool abey_busca_cliente(std::vector<int>& solucao, int l, int idx_cliente);
 
 /*
 *   Faz branch-and-bound no leilão para obter o ganho máximo
