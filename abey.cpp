@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 #include "abey.hpp"
 
 using namespace std;
@@ -84,4 +85,66 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
         soma_otimos += ofertas.rbegin()->first;
 
     return soma_arremts + soma_otimos;
+}
+
+bool abey_busca_cliente(vector<int>& solucao, int l, int idx_cliente) {
+    for (int i = 0; i < l; i++) {
+        if (solucao[i] == idx_cliente)
+            return true;
+    }
+
+    return false;
+}
+
+void abey_bnb_max_ganho(
+    const Leilao &leilao,
+    int l,
+    int p,
+    int (*bound)(const Leilao&, const Leilao&),
+    vector<int>& solucao,
+    int& ganho_otimo
+) {
+    if (l == p) {
+        int ganho_atual = 0;
+
+        /* Calcula ganho total até então */
+        for (int i = 0 ; i < p; i++) {
+            for (const Oferta& oferta : leilao[i]) {
+                if (oferta.second == solucao[i]) {
+                    ganho_atual += oferta.first;
+
+                    break;
+                }
+            }
+        }
+
+        ganho_otimo = max(ganho_otimo, ganho_atual);
+
+        /* Fim da árvore */
+        return;
+    }
+
+    /* Pega leilões de arrematados e pendentes para função de bound */
+    Leilao arremts(leilao.begin(), leilao.begin() + l);
+    Leilao pends(leilao.begin() + l, leilao.end());
+
+    int B = bound(arremts, pends);
+    
+    /* Para cada oferta para o l-ésimo produto, em ordem decrescente */
+    for (auto iter = leilao[l].rbegin(); iter != leilao[l].rend(); iter++) {
+        Oferta oferta = *iter;
+
+        /* Corte p/ otimalidade */
+        if (B <= ganho_otimo)
+            return;
+
+        /* Corte p/ viabilidade */
+        if (abey_busca_cliente(solucao, l, oferta.second))
+            continue;
+
+        /* Cliente arrematou e faz parte da solução atual */
+        solucao[l] = oferta.second;
+        abey_bnb_max_ganho(leilao, l + 1, p, bound, solucao, ganho_otimo);
+        solucao[l] = -1;
+    }
 }

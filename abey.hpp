@@ -4,7 +4,7 @@
 #include <vector>
 #include <set>
 
-/* Oferta da forma (i, j), onde i indexa um cliente e j representa o valor */
+/* Oferta da forma (i, j), onde i indexa um cliente e j representa o valor oferecido por ele */
 typedef std::pair<int, int> Oferta;
 
 /* Conjunto de ofertas */
@@ -50,13 +50,27 @@ int abey_bound_prof(const Leilao& arremts, const Leilao& prods_pend);
 int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend);
 
 /*
-*   Faz branch-and-bound no leilão para obter o ganho máximo
-*   
-*   Entrada: Leilão, nível da recursão, ptr. para função limitante, ref. para vetor de solução e ref. para variável de ganho
+*   Checa se o cliente indexado por 'idx_cliente' está em uma solução
 *
-*   Esperado: Em 'solucao' e 'ganho' estarão os clientes que formam os arremates necessários para se ter o ótimo, 
-*   e em 'ganho' estará o valor ótimo obtido por esses arremates
+*   Entrada: Solução, nível da recursão e índice do cliente
+*
+*   Saída: true se o cliente existir na solução e false caso contrário
 */
-void abey_bnb_max_ganho(const Leilao& leilao, int l, int (*bound)(Leilao, Leilao), std::vector<int>& solucao, int& ganho);
+bool abey_busca_cliente(std::vector<int>& solucao, int l, int idx_cliente);
+
+/*
+*   Faz branch-and-bound no leilão para obter o ganho máximo
+*
+*   Entrada: Leilão, nível da recursão, número de produtos, 
+*   ptr. para função de bound, vetor que guarda a solução atual e o ganho ótimo atual
+*/
+void abey_bnb_max_ganho(
+    const Leilao &leilao,
+    int l,
+    int p,
+    int (*bound)(Leilao&, Leilao&),
+    std::vector<int>& solucao,
+    int& ganho_otimo
+);
 
 #endif // __LEILAO__
