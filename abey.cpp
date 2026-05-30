@@ -142,7 +142,10 @@ void abey_bnb_max_ganho(
         if (abey_busca_cliente(solucao, l, oferta.second))
             continue;
 
-        /* Cliente arrematou e faz parte da solução atual */
+        /* Clientes sem interesse não são viáveis */
+        if (oferta.first == 0)
+            continue;
+
         solucao[l] = oferta.second;
         abey_bnb_max_ganho(leilao, l + 1, p, bound, solucao, ganho_otimo);
         solucao[l] = -1;
