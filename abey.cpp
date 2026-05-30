@@ -44,7 +44,7 @@ Leilao abey_cria_leilao(int p, int c) {
     /* Teste */
     for (const ConjuntoOfertas& conj_ofertas : leilao) {
         for (const Oferta& oferta : conj_ofertas)
-            cout << oferta.first << " ";
+            cout << "valor: " << oferta.first << "; índice: " << oferta.second << "\n";
 
         cout << "\n";
     }
