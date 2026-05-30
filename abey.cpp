@@ -130,7 +130,7 @@ void abey_bnb_max_ganho(
 
     int B = bound(arremts, pends);
     
-    /* Para cada oferta para o l-ésimo produto, em ordem decrescente */
+    /* Para cada oferta para o l-ésimo produto, em ordem decrescente (como é um set, as maiores ofertas estão no final) */
     for (auto iter = leilao[l].rbegin(); iter != leilao[l].rend(); iter++) {
         Oferta oferta = *iter;
 
