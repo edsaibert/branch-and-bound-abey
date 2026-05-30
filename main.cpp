@@ -18,7 +18,15 @@ int main(int argc, char* argv[]) {
 
     if (argc == 1) {
         /* Default */
-        cout << "Impl. default\n";
+        int ganho_max = 0;
+        vector<int> solucao(p, -1);
+
+        abey_bnb_max_ganho(leilao, 0, p, abey_bound_upgrade, solucao, ganho_max);
+
+        for (int i = 0; i < p; i++)
+            cout << i + 1 << " " << solucao[i] << "\n";
+
+        cout << ganho_max << "\n";
     } else {
         /* Com alguma opção de linha de comando */
         string opcao = argv[1];

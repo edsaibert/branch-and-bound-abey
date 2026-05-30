@@ -42,14 +42,6 @@ Leilao abey_cria_leilao(int p, int c) {
         leilao.push_back(ofertas);
     }
 
-    /* Teste */
-    for (const ConjuntoOfertas& conj_ofertas : leilao) {
-        for (const Oferta& oferta : conj_ofertas)
-            cout << "valor: " << oferta.first << "; índice: " << oferta.second << "\n";
-
-        cout << "\n";
-    }
-
     return leilao; 
 }
 
@@ -150,6 +142,5 @@ void abey_bnb_max_ganho(
 
         solucao[l] = oferta.second;
         abey_bnb_max_ganho(leilao, l + 1, p, bound, solucao, ganho_otimo);
-        solucao[l] = -1;
     }
 }
