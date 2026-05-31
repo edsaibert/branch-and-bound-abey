@@ -45,39 +45,39 @@ Leilao abey_cria_leilao(int p, int c) {
     return leilao; 
 }
 
-int abey_bound_prof(const Leilao& arremts, const Leilao& prods_pend) {
-    int soma_arremts = 0;
+int abey_bound_prof(const Leilao& prods_pend, int ganho_acumulado, const std::vector<bool>& selecionados) {
     int max_prods_pend = 0;
     int tam_prods_pend = prods_pend.size();
-
-    for (const ConjuntoOfertas& conj_ofertas : arremts) {
-        for (const Oferta& oferta : conj_ofertas)
-            soma_arremts += oferta.first;
-    }
+    /*
+        Soma dos valores de arremates já feitos mais o valor da oferta mais alta para um produto ainda não arrematado feita 
+        por um cliente que ainda não comprou nada multiplicado pelo número de produtos que faltam.
+    */
 
     for (const ConjuntoOfertas& ofertas : prods_pend) {
         for (const Oferta& oferta : ofertas)
-            max_prods_pend = max(max_prods_pend, oferta.first);
+            if (!selecionados[oferta.second])
+                max_prods_pend = max(max_prods_pend, oferta.first);
     }
 
-    return soma_arremts + tam_prods_pend * max_prods_pend;
+    return ganho_acumulado + max_prods_pend * (tam_prods_pend);
 }
 
-int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
-    int soma_arremts = 0;
+int abey_bound_upgrade(const Leilao& prods_pend, int ganho_acumulado, const std::vector<bool>& selecionados) {
     int soma_otimos = 0;
 
-    for (const ConjuntoOfertas& ofertas : arremts) {
-        for (const Oferta& oferta : ofertas)
-            soma_arremts += oferta.first;
+    /* Para cada produto pendente, pega a melhor oferta de um cliente disponível */
+    
+    for (const ConjuntoOfertas& ofertas : prods_pend) {
+        int max_disponivel = 0;
+        for (const Oferta& oferta : ofertas) {
+            if (!selecionados[oferta.second]) {
+                max_disponivel = max(max_disponivel, oferta.first);
+            }
+        }
+        soma_otimos += max_disponivel;
     }
 
-    for (const ConjuntoOfertas& ofertas : prods_pend)
-        /* Pega a última oferta de cada conj. de ofertas (maior oferta) e acumula */
-        /* MINDSET GULOSO?!?! */
-        soma_otimos += ofertas.rbegin()->first;
-
-    return soma_arremts + soma_otimos;
+    return ganho_acumulado + soma_otimos;
 }
 
 void abey_bnb_max_ganho(
@@ -85,7 +85,7 @@ void abey_bnb_max_ganho(
     int l,
     int p,
     int c,
-    int (&bound)(const Leilao&, const Leilao&),
+    int (&bound)(const Leilao&, int, const std::vector<bool>&),
     Otimo& otimo,
     Atual& atual,
     Monitor& monitor,
@@ -103,11 +103,10 @@ void abey_bnb_max_ganho(
         return;
     }
     
-    /* Pega leilões de arrematados e pendentes para função de bound */
-    Leilao arremts(leilao.begin(), leilao.begin() + l);
+    /* Pega leilões de produtos pendentes para função de bound */
     Leilao pends(leilao.begin() + l, leilao.end());
 
-    int B = bound(arremts, pends);
+    int B = bound(pends, atual.ganho_acumulado, atual.selecionados);
     
     /* Para cada oferta para o l-ésimo produto, em ordem decrescente (como é um set, as maiores ofertas estão no final) */
     for (auto iter = leilao[l].rbegin(); iter != leilao[l].rend(); iter++) {

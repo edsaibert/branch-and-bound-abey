@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include <chrono>
+#include <algorithm>
 
 /* Oferta da forma (i, j), onde i indexa um cliente e j representa o valor oferecido por ele */
 typedef std::pair<int, int> Oferta;
@@ -56,20 +57,20 @@ Leilao abey_cria_leilao(int p, int c);
 /*
 *   Função limitante dada pelo professor: \sum_{(i, j) \in A} o_{i, j} + |P| \max\{o_{i, j} | i \in P, j \in C\}
 *
-*   Entrada: Leilão dos arremates já feitos e um leilão com os produtos pendentes
+*   Entrada: Leilão com produtos pendentes, ganho acumulado e clientes selecionados
 *
 *   Saída: Limitante superior para a configuração de leilões de arrematados e pendentes atual
 */
-int abey_bound_prof(const Leilao& arremts, const Leilao& prods_pend);
+int abey_bound_prof(const Leilao& prods_pend, int ganho_acumulado, const std::vector<bool>& selecionados);
 
 /*
-*   Função limitante proposta pelos alunos: \sum_{(i, j) \in A} o_{i, j} + \sum_{i = k}^{p} o_{i, c}, tal que k \in P e c = \max\{x : x \in C\}
+*   Função limitante proposta pelos alunos
 *   
-*   Entrada: Leilão dos arremates já feitos e um leilão com os produtos pendentes
+*   Entrada: Leilão com produtos pendentes, ganho acumulado e clientes selecionados
 *
 *   Saída: Limitante superior para a configuração de leilões de arrematados e pendentes atual
 */
-int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend);
+int abey_bound_upgrade(const Leilao& prods_pend, int ganho_acumulado, const std::vector<bool>& selecionados);
 
 /*
 *   Faz branch-and-bound no leilão para obter o ganho máximo
@@ -83,7 +84,7 @@ void abey_bnb_max_ganho(
     int l,
     int p,
     int c,
-    int (&bound)(const Leilao&, const Leilao&),
+    int (&bound)(const Leilao&, int, const std::vector<bool>&),
     Otimo& otimo,
     Atual& atual,
     Monitor& monitor,

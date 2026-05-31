@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     Atual atual(p, c);
     Flags flags;
     Monitor monitor;
-    int (*bound)(const Leilao&, const Leilao&) = &abey_bound_upgrade;
+    int (*bound)(const Leilao&, int, const std::vector<bool>&) = &abey_bound_upgrade;
 
     if (argc == 1) {
         /* Backtracking com função de bound proposta pelos alunos */
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
     cout << otimo.ganho << "\n";
 
     /* Print stderr */
-    cerr << "[+] Duração: " << monitor.tempo_execucao.count() << "\n";
+    cerr << "[+] Duração: " << monitor.tempo_execucao.count() << "ms\n";
     cerr << "[+] Número de nodos: " << monitor.num_nodos << "\n";
     cerr << "[+] Número de nodos podados: " << monitor.num_nodos_podados << "\n";
 
