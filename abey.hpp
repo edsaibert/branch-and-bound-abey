@@ -64,7 +64,7 @@ Leilao abey_cria_leilao(const int p, const int c);
 *
 *   Saída: Limitante superior para a configuração de leilões de arrematados e pendentes atual
 */
-int abey_bound_prof(const Leilao& prods_pend, int ganho_acumulado, const std::vector<bool>& selecionados);
+int abey_bound_prof(const Leilao& prods_pend, const int ganho_acumulado, const std::vector<bool>& selecionados);
 
 /*
 *   Função limitante proposta pelos alunos
@@ -73,7 +73,7 @@ int abey_bound_prof(const Leilao& prods_pend, int ganho_acumulado, const std::ve
 *
 *   Saída: Limitante superior para a configuração de leilões de arrematados e pendentes atual
 */
-int abey_bound_upgrade(const Leilao& prods_pend, int ganho_acumulado, const std::vector<bool>& selecionados);
+int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, const std::vector<bool>& selecionados);
 
 /*
 *   Faz branch-and-bound no leilão para obter o ganho máximo
