@@ -80,39 +80,25 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
     return soma_arremts + soma_otimos;
 }
 
-/* Busca linear simples por um cliente de índice específico */
-bool abey_busca_cliente(vector<int>& solucao, int l, int idx_cliente) {
-    for (int i = 0; i < l; i++) {
-        if (solucao[i] == idx_cliente)
-            return true;
-    }
 
-    return false;
-}
 
 void abey_bnb_max_ganho(
     const Leilao &leilao,
     int l,
     int p,
+    int c,
     int (&bound)(const Leilao&, const Leilao&),
     vector<int>& solucao,
-    int& ganho_otimo
+    int& ganho_otimo,
+    vector<int>& melhor_solucao,
+    int curP,
+    vector<bool>& selecionados
 ) {
     if (l == p) {
-        int ganho_atual = 0;
-
-        /* Calcula ganho total até então */
-        for (int i = 0 ; i < p; i++) {
-            for (const Oferta& oferta : leilao[i]) {
-                if (oferta.second == solucao[i]) {
-                    ganho_atual += oferta.first;
-
-                    break;
-                }
-            }
+        if (curP > ganho_otimo) {
+            ganho_otimo = curP;
+            melhor_solucao = solucao;
         }
-
-        ganho_otimo = max(ganho_otimo, ganho_atual);
 
         /* Fim da árvore */
         return;
@@ -133,7 +119,7 @@ void abey_bnb_max_ganho(
             return;
 
         /* Corte p/ viabilidade */
-        if (abey_busca_cliente(solucao, l, oferta.second))
+        if (selecionados[oferta.second])
             continue;
 
         /* Clientes sem interesse não são viáveis */
@@ -141,6 +127,11 @@ void abey_bnb_max_ganho(
             continue;
 
         solucao[l] = oferta.second;
-        abey_bnb_max_ganho(leilao, l + 1, p, bound, solucao, ganho_otimo);
+        selecionados[oferta.second] = true;
+
+        abey_bnb_max_ganho(leilao, l + 1, p, c, bound, solucao, ganho_otimo, melhor_solucao, curP + oferta.first, selecionados);
+        
+        /* backtrack */
+        selecionados[oferta.second] = false;
     }
 }

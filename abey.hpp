@@ -43,16 +43,22 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend);
 /*
 *   Faz branch-and-bound no leilão para obter o ganho máximo
 *
-*   Entrada: Leilão, nível da recursão, número de produtos, 
-*   ptr. para função de bound, vetor que guarda a solução atual e o ganho ótimo atual
+*   Entrada: Leilão, nível da recursão, número de produtos, número de clientes,
+*   ptr. para função de bound, vetor que guarda a solução atual, o ganho ótimo atual,
+*   vetor que guarda a melhor solução encontrada, ganho acumulado (padrão 0),
+*   e vetor de booleanos indicando quais clientes já foram selecionados
 */
 void abey_bnb_max_ganho(
     const Leilao &leilao,
     int l,
     int p,
+    int c,
     int (&bound)(const Leilao&, const Leilao&),
     std::vector<int>& solucao,
-    int& ganho_otimo
+    int& ganho_otimo,
+    std::vector<int>& melhor_solucao,
+    int curP = 0,
+    std::vector<bool>& selecionados = *new std::vector<bool>()
 );
 
 #endif // __LEILAO__

@@ -20,11 +20,13 @@ int main(int argc, char* argv[]) {
         /* Default */
         int ganho_max = 0;
         vector<int> solucao(p, -1);
+        vector<int> melhor_solucao(p, -1);
+        vector<bool> selecionados(c + 1, false);
 
-        abey_bnb_max_ganho(leilao, 0, p, abey_bound_upgrade, solucao, ganho_max);
+        abey_bnb_max_ganho(leilao, 0, p, c, abey_bound_upgrade, solucao, ganho_max, melhor_solucao, 0, selecionados);
 
         for (int i = 0; i < p; i++)
-            cout << i + 1 << " " << solucao[i] << "\n";
+            cout << i + 1 << " " << melhor_solucao[i] << "\n";
 
         cout << ganho_max << "\n";
     } else {
