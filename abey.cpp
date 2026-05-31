@@ -66,7 +66,7 @@ int abey_bound_prof(const Leilao& prods_pend, const int ganho_acumulado, const v
 int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, const vector<bool>& selecionados) {
     int soma_otimos = 0;
         
-    /* Para cada produto pendente, gulosamente pega a melhor oferta de um cliente disponível */
+    /* Para cada produto pendente, **gulosamente** pega a melhor oferta de um cliente disponível */
     for (const ConjuntoOfertas& ofertas : prods_pend) {
         int max_disponivel = 0;
 
@@ -113,7 +113,7 @@ void abey_bnb_max_ganho(
         Oferta oferta = *iter;
 
         /* Corte p/ otimalidade */
-        if (B <= otimo.ganho){
+        if (flags.flag_otimalidade && B <= otimo.ganho){
             monitor.num_nodos_podados++;
 
             return;

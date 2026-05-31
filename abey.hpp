@@ -34,7 +34,7 @@ struct Atual {
 /* 
 *   Struct para bandeiras de controle 
 *
-*   Bandeiras de otimalidade e viabilidade ligadas por padrão
+*   Bandeiras de viabilidade e otimalidade ligadas por padrão
 */
 struct Flags {
     bool flag_viabilidade = true;
@@ -78,7 +78,7 @@ int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, cons
 /*
 *   Faz branch-and-bound no leilão para obter o ganho máximo
 *
-*   Entrada: Leilão, nível da recursão, número de produtos, número de clientes,
+*   Entrada: Leilão, nível da recursão, número de produtos,
 *   ptr. para função de bound, struct com solução ótima, struct com solução atual,
 *   e struct com flags de controle
 */

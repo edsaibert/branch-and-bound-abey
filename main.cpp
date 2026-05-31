@@ -16,19 +16,24 @@ int main(int argc, char* argv[]) {
     if (leilao.size() == 0)
         return 1;
 
-    /* Inicialização com defaults*/
+    /* Inicialização com defaults */
     Otimo otimo(p);
     Atual atual(p, c);
     Flags flags;
-
-    /* abey_bound_upgrade() por padrão */
-    int (*bound)(const Leilao&, const Leilao&) = &abey_bound_upgrade;
+    Monitor monitor;
+    int (*bound)(const Leilao&, const int, const std::vector<bool>&) = &abey_bound_upgrade;
 
     if (argc == 1) {
-        /* Branch-and-Bound com função de bound feita pelos alunos */
-        abey_bnb_max_ganho(leilao, 0, p, *bound, otimo, atual, flags);
+        /* Default: Backtracking com função de bound proposta pelos alunos */
+        auto start = std::chrono::high_resolution_clock::now();
+
+        abey_bnb_max_ganho(leilao, 0, p, *bound, otimo, atual, monitor, flags);
+
+        auto end = std::chrono::high_resolution_clock::now();
+        monitor.tempo_execucao = end - start;
     } else {
-        /* Passa pelas opções de linha de comando e ativa as flags necessárias */
+        /* Com alguma opção de linha de comando */
+
         for (int i = 1; i < argc; i++) {
             string opcao = argv[i];
 
@@ -39,13 +44,18 @@ int main(int argc, char* argv[]) {
             } else if (opcao == "-o") {
                 flags.flag_otimalidade = false;
             } else {
-                cerr << "[-] main(): Opção inválida\n";
+                cerr << "[-] main(): Opção inválida, use uma combinação de -a, -f ou -o\n";
 
                 return 1;
             }
         }
 
-        abey_bnb_max_ganho(leilao, 0, p, *bound, otimo, atual, flags);
+        auto start = std::chrono::high_resolution_clock::now();
+
+        abey_bnb_max_ganho(leilao, 0, p, *bound, otimo, atual, monitor, flags);
+
+        auto end = std::chrono::high_resolution_clock::now();
+        monitor.tempo_execucao = end - start;
     }
 
     cout << "\n";
@@ -54,6 +64,11 @@ int main(int argc, char* argv[]) {
         cout << i + 1 << " " << otimo.solucao[i] << "\n";
 
     cout << otimo.ganho << "\n";
+
+    /* Relatório em stderr */
+    cerr << "Duração: " << monitor.tempo_execucao.count() << "ms\n";
+    cerr << "Número de nodos: " << monitor.num_nodos << "\n";
+    cerr << "Número de nodos podados: " << monitor.num_nodos_podados << "\n";
 
     return 0;
 }
