@@ -13,6 +13,29 @@ typedef std::set<Oferta> ConjuntoOfertas;
 /* Vetor de conjuntos de ofertas (leilão) */
 typedef std::vector<ConjuntoOfertas> Leilao;
 
+/* Struct para variáveis da solução ótima encontrada */
+struct Otimo {
+    int ganho = 0;
+    std::vector<int> solucao;
+    
+    Otimo(int p) : solucao(p, -1) {}
+};
+
+/* Struct para variáveis da solução atual */
+struct Atual {
+    std::vector<int> solucao;
+    std::vector<bool> selecionados;
+    int ganho_acumulado = 0;
+    
+    Atual(int p, int c) : solucao(p, -1), selecionados(c + 1, false) {}
+};
+
+/* Struct para bandeiras de controle */
+struct Flags {
+    bool flag_viabilidade = false;
+    bool flag_otimalidade = false;
+};
+
 /* 
 *   Cria um leilão com 'p' produtos e 'c' ofertas (1 p/ cliente)
 *
@@ -44,9 +67,8 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend);
 *   Faz branch-and-bound no leilão para obter o ganho máximo
 *
 *   Entrada: Leilão, nível da recursão, número de produtos, número de clientes,
-*   ptr. para função de bound, vetor que guarda a solução atual, o ganho ótimo atual,
-*   vetor que guarda a melhor solução encontrada, ganho acumulado (padrão 0),
-*   e vetor de booleanos indicando quais clientes já foram selecionados
+*   ptr. para função de bound, struct com solução ótima, struct com solução atual,
+*   e struct com flags de controle
 */
 void abey_bnb_max_ganho(
     const Leilao &leilao,
@@ -54,13 +76,9 @@ void abey_bnb_max_ganho(
     int p,
     int c,
     int (&bound)(const Leilao&, const Leilao&),
-    std::vector<int>& solucao,
-    int& ganho_otimo,
-    std::vector<int>& melhor_solucao,
-    int curP = 0,
-    std::vector<bool>& selecionados = *new std::vector<bool>(),
-    bool flag_viabilidade = 0,
-    bool flag_otimalidade = 0
+    Otimo& otimo,
+    Atual& atual,
+    Flags flags
 );
 
 #endif // __LEILAO__

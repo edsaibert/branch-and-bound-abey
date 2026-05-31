@@ -86,18 +86,14 @@ void abey_bnb_max_ganho(
     int p,
     int c,
     int (&bound)(const Leilao&, const Leilao&),
-    vector<int>& solucao,
-    int& ganho_otimo,
-    vector<int>& melhor_solucao,
-    int curP,
-    vector<bool>& selecionados,
-    bool flag_viabilidade,
-    bool flag_otimalidade
+    Otimo& otimo,
+    Atual& atual,
+    Flags flags
 ) {
     if (l == p) {
-        if (curP > ganho_otimo) {
-            ganho_otimo = curP;
-            melhor_solucao = solucao;
+        if (atual.ganho_acumulado > otimo.ganho) {
+            otimo.ganho = atual.ganho_acumulado;
+            otimo.solucao = atual.solucao;
         }
 
         /* Fim da árvore */
@@ -115,23 +111,25 @@ void abey_bnb_max_ganho(
         Oferta oferta = *iter;
 
         /* Corte p/ otimalidade */
-        if (B <= ganho_otimo)
+        if (B <= otimo.ganho)
             return;
 
         /* Corte p/ viabilidade */
-        if (!flag_viabilidade && selecionados[oferta.second])
+        if (!flags.flag_viabilidade && atual.selecionados[oferta.second])
             continue;
 
         /* Clientes sem interesse não são viáveis */
-        if (!flag_otimalidade && oferta.first == 0)
+        if (!flags.flag_otimalidade && oferta.first == 0)
             continue;
 
-        solucao[l] = oferta.second;
-        selecionados[oferta.second] = true;
+        atual.solucao[l] = oferta.second;
+        atual.selecionados[oferta.second] = true;
+        atual.ganho_acumulado += oferta.first;
 
-        abey_bnb_max_ganho(leilao, l + 1, p, c, bound, solucao, ganho_otimo, melhor_solucao, curP + oferta.first, selecionados, flag_viabilidade, flag_otimalidade);
+        abey_bnb_max_ganho(leilao, l + 1, p, c, bound, otimo, atual, flags);
         
         /* backtrack */
-        selecionados[oferta.second] = false;
+        atual.ganho_acumulado -= oferta.first;
+        atual.selecionados[oferta.second] = false;
     }
 }

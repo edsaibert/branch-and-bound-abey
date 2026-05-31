@@ -16,21 +16,19 @@ int main(int argc, char* argv[]) {
     if (leilao.size() == 0)
         return 1;
 
-    /* Default */
-    int ganho_max = 0;
-    vector<int> solucao(p, -1);
-    vector<int> melhor_solucao(p, -1);
-    vector<bool> selecionados(c + 1, false);
+    /* Inicialização com defaults*/
+    Otimo otimo(p);
+    Atual atual(p, c);
+    Flags flags;
+    int (*bound)(const Leilao&, const Leilao&) = &abey_bound_upgrade;
 
     if (argc == 1) {
-        abey_bnb_max_ganho(leilao, 0, p, c, abey_bound_upgrade, solucao, ganho_max, melhor_solucao, 0, selecionados);
+        /* Backtracking com função de bound proposta pelos alunos */
+        abey_bnb_max_ganho(leilao, 0, p, c, *bound, otimo, atual, flags);
 
     } else {
         /* Com alguma opção de linha de comando */
         string opcao = argv[1];
-        int (*bound)(const Leilao&, const Leilao&) = &abey_bound_upgrade;
-        bool flag_viabilidade = 0;
-        bool flag_otimalidade = 0;
 
         cout << "Impl. com " << opcao << "\n";
         if (opcao == "-a"){
@@ -39,25 +37,25 @@ int main(int argc, char* argv[]) {
         }
         else if (opcao == "-f"){
             /* Desliga os cortes de viabilidade */
-            flag_viabilidade = 1;
+            flags.flag_viabilidade = 1;
         }
         else if (opcao == "-o"){
             /* Desliga os cortes de otimalidade */
-            flag_otimalidade = 1;
+            flags.flag_otimalidade = 1;
         }
         else {
             cerr << "[-] main(): Opção inválida, use -a, -f ou -o\n";
 
             return 1;
         }
-
-        abey_bnb_max_ganho(leilao, 0, p, c, *bound, solucao, ganho_max, melhor_solucao, 0, selecionados, flag_viabilidade, flag_otimalidade);
+        abey_bnb_max_ganho(leilao, 0, p, c, *bound, otimo, atual, flags);
     }
 
+    /* Print */
     for (int i = 0; i < p; i++)
-        cout << i + 1 << " " << melhor_solucao[i] << "\n";
+        cout << i + 1 << " " << otimo.solucao[i] << "\n";
 
-    cout << ganho_max << "\n";
+    cout << otimo.ganho << "\n";
 
     return 0;
 }
