@@ -21,15 +21,15 @@ int main(int argc, char* argv[]) {
     Atual atual(p, c);
     Flags flags;
     Monitor monitor;
-    int (*bound)(const Leilao&, const int, const std::vector<bool>&) = &abey_bound_upgrade;
+    int (*bound)(const Leilao&, const int, const vector<bool>&) = &abey_bound_upgrade;
 
     if (argc == 1) {
         /* Default: Backtracking com função de bound proposta pelos alunos */
-        auto start = std::chrono::high_resolution_clock::now();
+        auto start = chrono::high_resolution_clock::now();
 
         abey_bnb_max_ganho(leilao, 0, p, *bound, otimo, atual, monitor, flags);
 
-        auto end = std::chrono::high_resolution_clock::now();
+        auto end = chrono::high_resolution_clock::now();
         monitor.tempo_execucao = end - start;
     } else {
         /* Com alguma opção de linha de comando */
@@ -50,11 +50,11 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        auto start = std::chrono::high_resolution_clock::now();
+        auto start = chrono::high_resolution_clock::now();
 
         abey_bnb_max_ganho(leilao, 0, p, *bound, otimo, atual, monitor, flags);
 
-        auto end = std::chrono::high_resolution_clock::now();
+        auto end = chrono::high_resolution_clock::now();
         monitor.tempo_execucao = end - start;
     }
 
