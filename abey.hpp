@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <set>
+#include <chrono>
 
 /* Oferta da forma (i, j), onde i indexa um cliente e j representa o valor oferecido por ele */
 typedef std::pair<int, int> Oferta;
@@ -15,7 +16,7 @@ typedef std::vector<ConjuntoOfertas> Leilao;
 
 /* Struct para variáveis da solução ótima encontrada */
 struct Otimo {
-    int ganho = 0;
+    int ganho = -1;
     std::vector<int> solucao;
     
     Otimo(int p) : solucao(p, -1) {}
@@ -34,6 +35,13 @@ struct Atual {
 struct Flags {
     bool flag_viabilidade = false;
     bool flag_otimalidade = false;
+};
+
+/* Struct para o monitoramento das funções e produção do relatório */
+struct Monitor {
+    std::chrono::duration<double, std::milli> tempo_execucao;
+    int num_nodos = 0;
+    int num_nodos_podados = 0;
 };
 
 /* 
@@ -78,6 +86,7 @@ void abey_bnb_max_ganho(
     int (&bound)(const Leilao&, const Leilao&),
     Otimo& otimo,
     Atual& atual,
+    Monitor& monitor,
     Flags flags
 );
 

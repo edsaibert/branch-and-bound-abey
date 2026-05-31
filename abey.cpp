@@ -88,8 +88,11 @@ void abey_bnb_max_ganho(
     int (&bound)(const Leilao&, const Leilao&),
     Otimo& otimo,
     Atual& atual,
+    Monitor& monitor,
     Flags flags
 ) {
+    monitor.num_nodos++;
+
     if (l == p) {
         if (atual.ganho_acumulado > otimo.ganho) {
             otimo.ganho = atual.ganho_acumulado;
@@ -99,7 +102,7 @@ void abey_bnb_max_ganho(
         /* Fim da árvore */
         return;
     }
-
+    
     /* Pega leilões de arrematados e pendentes para função de bound */
     Leilao arremts(leilao.begin(), leilao.begin() + l);
     Leilao pends(leilao.begin() + l, leilao.end());
@@ -111,8 +114,10 @@ void abey_bnb_max_ganho(
         Oferta oferta = *iter;
 
         /* Corte p/ otimalidade */
-        if (B <= otimo.ganho)
+        if (B <= otimo.ganho){
+            monitor.num_nodos_podados++;             
             return;
+        }
 
         /* Corte p/ viabilidade */
         if (!flags.flag_viabilidade && atual.selecionados[oferta.second])
@@ -126,10 +131,14 @@ void abey_bnb_max_ganho(
         atual.selecionados[oferta.second] = true;
         atual.ganho_acumulado += oferta.first;
 
-        abey_bnb_max_ganho(leilao, l + 1, p, c, bound, otimo, atual, flags);
+        abey_bnb_max_ganho(leilao, l + 1, p, c, bound, otimo, atual, monitor, flags);
         
         /* backtrack */
         atual.ganho_acumulado -= oferta.first;
         atual.selecionados[oferta.second] = false;
     }
+
+    /* Opção de deixar o produto sem atribuição (solução = -1) */
+    atual.solucao[l] = -1;  
+    abey_bnb_max_ganho(leilao, l + 1, p, c, bound, otimo, atual, monitor, flags);
 }

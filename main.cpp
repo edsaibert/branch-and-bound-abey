@@ -20,11 +20,17 @@ int main(int argc, char* argv[]) {
     Otimo otimo(p);
     Atual atual(p, c);
     Flags flags;
+    Monitor monitor;
     int (*bound)(const Leilao&, const Leilao&) = &abey_bound_upgrade;
 
     if (argc == 1) {
         /* Backtracking com função de bound proposta pelos alunos */
-        abey_bnb_max_ganho(leilao, 0, p, c, *bound, otimo, atual, flags);
+        auto start = std::chrono::high_resolution_clock::now();
+
+        abey_bnb_max_ganho(leilao, 0, p, c, *bound, otimo, atual, monitor, flags);
+
+        auto end = std::chrono::high_resolution_clock::now();
+        monitor.tempo_execucao = end - start;
 
     } else {
         /* Com alguma opção de linha de comando */
@@ -48,7 +54,12 @@ int main(int argc, char* argv[]) {
 
             return 1;
         }
-        abey_bnb_max_ganho(leilao, 0, p, c, *bound, otimo, atual, flags);
+        auto start = std::chrono::high_resolution_clock::now();
+
+        abey_bnb_max_ganho(leilao, 0, p, c, *bound, otimo, atual, monitor, flags);
+
+        auto end = std::chrono::high_resolution_clock::now();
+        monitor.tempo_execucao = end - start;
     }
 
     /* Print */
@@ -56,6 +67,11 @@ int main(int argc, char* argv[]) {
         cout << i + 1 << " " << otimo.solucao[i] << "\n";
 
     cout << otimo.ganho << "\n";
+
+    /* Print stderr */
+    cerr << "[+] Duração: " << monitor.tempo_execucao.count() << "\n";
+    cerr << "[+] Número de nodos: " << monitor.num_nodos << "\n";
+    cerr << "[+] Número de nodos podados: " << monitor.num_nodos_podados << "\n";
 
     return 0;
 }
