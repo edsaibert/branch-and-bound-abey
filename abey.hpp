@@ -58,7 +58,9 @@ void abey_bnb_max_ganho(
     int& ganho_otimo,
     std::vector<int>& melhor_solucao,
     int curP = 0,
-    std::vector<bool>& selecionados = *new std::vector<bool>()
+    std::vector<bool>& selecionados = *new std::vector<bool>(),
+    bool flag_viabilidade = 0,
+    bool flag_otimalidade = 0
 );
 
 #endif // __LEILAO__

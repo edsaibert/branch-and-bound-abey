@@ -80,8 +80,6 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
     return soma_arremts + soma_otimos;
 }
 
-
-
 void abey_bnb_max_ganho(
     const Leilao &leilao,
     int l,
@@ -92,7 +90,9 @@ void abey_bnb_max_ganho(
     int& ganho_otimo,
     vector<int>& melhor_solucao,
     int curP,
-    vector<bool>& selecionados
+    vector<bool>& selecionados,
+    bool flag_viabilidade,
+    bool flag_otimalidade
 ) {
     if (l == p) {
         if (curP > ganho_otimo) {
@@ -119,17 +119,17 @@ void abey_bnb_max_ganho(
             return;
 
         /* Corte p/ viabilidade */
-        if (selecionados[oferta.second])
+        if (!flag_viabilidade && selecionados[oferta.second])
             continue;
 
         /* Clientes sem interesse não são viáveis */
-        if (oferta.first == 0)
+        if (!flag_otimalidade && oferta.first == 0)
             continue;
 
         solucao[l] = oferta.second;
         selecionados[oferta.second] = true;
 
-        abey_bnb_max_ganho(leilao, l + 1, p, c, bound, solucao, ganho_otimo, melhor_solucao, curP + oferta.first, selecionados);
+        abey_bnb_max_ganho(leilao, l + 1, p, c, bound, solucao, ganho_otimo, melhor_solucao, curP + oferta.first, selecionados, flag_viabilidade, flag_otimalidade);
         
         /* backtrack */
         selecionados[oferta.second] = false;
