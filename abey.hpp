@@ -33,7 +33,7 @@ struct Atual {
 /* 
 *   Struct para bandeiras de controle
 *
-*   Flags de viabilidade ligadas por padrão
+*   Flags de viabilidade e otimalidade ligadas por padrão
 */
 struct Flags {
     bool flag_viabilidade = true;
