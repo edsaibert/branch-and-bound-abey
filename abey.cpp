@@ -130,4 +130,7 @@ void abey_bnb_max_ganho(
         atual.ganho_acumulado -= oferta.first;
         atual.selecionados[oferta.second] = false;
     }
+
+    atual.solucao[l] = -1;
+    abey_bnb_max_ganho(leilao, l + 1, p, bound, otimo, atual, flags);
 }
