@@ -5,7 +5,7 @@
 using namespace std;
 
 /* Cria um conjunto de ofertas (devolve conjunto vazio caso ocorra erro) */
-ConjuntoOfertas abey_cria_ofertas(int qtd_ofertas) {
+ConjuntoOfertas abey_cria_ofertas(const int qtd_ofertas) {
     if (qtd_ofertas <= 0) {
         cerr << "[-] abey_cria_ofertas(): Qtd. inválida de ofertas\n";
 
@@ -24,7 +24,7 @@ ConjuntoOfertas abey_cria_ofertas(int qtd_ofertas) {
     return ofertas;
 }
 
-Leilao abey_cria_leilao(int p, int c) {
+Leilao abey_cria_leilao(const int p, const int c) {
     if (p <= 0 || c <= 0) {
         cerr << "[-] abey_cria_leilao(): Dimensões de leilão inválidas\n";
 
@@ -73,8 +73,7 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
     }
 
     for (const ConjuntoOfertas& ofertas : prods_pend)
-        /* Pega a última oferta de cada conj. de ofertas (maior oferta) e acumula */
-        /* MINDSET GULOSO?!?! */
+        /* Gulosamente acumula pela maior oferta possível de cada produto */
         soma_otimos += ofertas.rbegin()->first;
 
     return soma_arremts + soma_otimos;
@@ -82,9 +81,8 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend) {
 
 void abey_bnb_max_ganho(
     const Leilao &leilao,
-    int l,
-    int p,
-    int c,
+    const int l,
+    const int p,
     int (&bound)(const Leilao&, const Leilao&),
     Otimo& otimo,
     Atual& atual,
@@ -106,29 +104,29 @@ void abey_bnb_max_ganho(
 
     int B = bound(arremts, pends);
     
-    /* Para cada oferta para o l-ésimo produto, em ordem decrescente (como é um set, as maiores ofertas estão no final) */
+    /* Para cada oferta para o l-ésimo produto, em ordem decrescente (cortes p/ otimalidade mais cedo) */
     for (auto iter = leilao[l].rbegin(); iter != leilao[l].rend(); iter++) {
         Oferta oferta = *iter;
 
         /* Corte p/ otimalidade */
-        if (B <= otimo.ganho)
+        if (flags.flag_otimalidade && B <= otimo.ganho)
             return;
 
         /* Corte p/ viabilidade */
-        if (!flags.flag_viabilidade && atual.selecionados[oferta.second])
-            continue;
-
-        /* Clientes sem interesse não são viáveis */
-        if (!flags.flag_otimalidade && oferta.first == 0)
+        if (
+            flags.flag_viabilidade
+            &&
+            (atual.selecionados[oferta.second] || oferta.first == 0)
+        )
             continue;
 
         atual.solucao[l] = oferta.second;
         atual.selecionados[oferta.second] = true;
         atual.ganho_acumulado += oferta.first;
 
-        abey_bnb_max_ganho(leilao, l + 1, p, c, bound, otimo, atual, flags);
+        abey_bnb_max_ganho(leilao, l + 1, p, bound, otimo, atual, flags);
         
-        /* backtrack */
+        /* backtrack desfazendo decisão atual */
         atual.ganho_acumulado -= oferta.first;
         atual.selecionados[oferta.second] = false;
     }

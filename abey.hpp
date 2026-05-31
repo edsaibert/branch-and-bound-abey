@@ -30,10 +30,14 @@ struct Atual {
     Atual(int p, int c) : solucao(p, -1), selecionados(c + 1, false) {}
 };
 
-/* Struct para bandeiras de controle */
+/* 
+*   Struct para bandeiras de controle
+*
+*   Flags de viabilidade ligadas por padrão
+*/
 struct Flags {
-    bool flag_viabilidade = false;
-    bool flag_otimalidade = false;
+    bool flag_viabilidade = true;
+    bool flag_otimalidade = true;
 };
 
 /* 
@@ -43,7 +47,7 @@ struct Flags {
 *
 *   Saída: Um leilão de dimensões p X c ou um leilão vazio caso alguma dimensão for inválida
 */
-Leilao abey_cria_leilao(int p, int c);
+Leilao abey_cria_leilao(const int p, const int c);
 
 /*
 *   Função limitante dada pelo professor: \sum_{(i, j) \in A} o_{i, j} + |P| \max\{o_{i, j} | i \in P, j \in C\}
@@ -72,9 +76,8 @@ int abey_bound_upgrade(const Leilao& arremts, const Leilao& prods_pend);
 */
 void abey_bnb_max_ganho(
     const Leilao &leilao,
-    int l,
-    int p,
-    int c,
+    const int l,
+    const int p,
     int (&bound)(const Leilao&, const Leilao&),
     Otimo& otimo,
     Atual& atual,

@@ -20,38 +20,36 @@ int main(int argc, char* argv[]) {
     Otimo otimo(p);
     Atual atual(p, c);
     Flags flags;
+
+    /* abey_bound_upgrade() por padrão */
     int (*bound)(const Leilao&, const Leilao&) = &abey_bound_upgrade;
 
     if (argc == 1) {
-        /* Backtracking com função de bound proposta pelos alunos */
-        abey_bnb_max_ganho(leilao, 0, p, c, *bound, otimo, atual, flags);
-
+        /* Branch-and-Bound com função de bound feita pelos alunos */
+        abey_bnb_max_ganho(leilao, 0, p, *bound, otimo, atual, flags);
     } else {
-        /* Com alguma opção de linha de comando */
-        string opcao = argv[1];
+        /* Passa pelas opções de linha de comando e ativa as flags necessárias */
+        for (int i = 1; i < argc; i++) {
+            string opcao = argv[i];
 
-        cout << "Impl. com " << opcao << "\n";
-        if (opcao == "-a"){
-            /* Backtracking com função de bound dada pelo professor */
-            bound = &abey_bound_prof;
-        }
-        else if (opcao == "-f"){
-            /* Desliga os cortes de viabilidade */
-            flags.flag_viabilidade = 1;
-        }
-        else if (opcao == "-o"){
-            /* Desliga os cortes de otimalidade */
-            flags.flag_otimalidade = 1;
-        }
-        else {
-            cerr << "[-] main(): Opção inválida, use -a, -f ou -o\n";
+            if (opcao == "-a") {
+                bound = &abey_bound_prof;
+            } else if (opcao == "-f") {
+                flags.flag_viabilidade = false;
+            } else if (opcao == "-o") {
+                flags.flag_otimalidade = false;
+            } else {
+                cerr << "[-] main(): Opção inválida\n";
 
-            return 1;
+                return 1;
+            }
         }
-        abey_bnb_max_ganho(leilao, 0, p, c, *bound, otimo, atual, flags);
+
+        abey_bnb_max_ganho(leilao, 0, p, *bound, otimo, atual, flags);
     }
 
-    /* Print */
+    cout << "\n";
+
     for (int i = 0; i < p; i++)
         cout << i + 1 << " " << otimo.solucao[i] << "\n";
 
