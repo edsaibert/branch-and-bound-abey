@@ -91,7 +91,7 @@ void abey_bnb_max_ganho(
     const Leilao &leilao,
     const int l,
     const int p,
-    int (&bound)(const Leilao&, int, const vector<bool>&),
+    int (&bound)(const Leilao&, const int, const vector<bool>&),
     Otimo& otimo,
     Atual& atual,
     Monitor& monitor,
