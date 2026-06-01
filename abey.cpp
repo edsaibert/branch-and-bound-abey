@@ -49,9 +49,10 @@ int abey_bound_prof(const Leilao& prods_pend, const int ganho_acumulado, const v
     int max_prods_pend = 0;
     int tam_prods_pend = prods_pend.size();
 
-    /*
-        Soma dos valores de arremates já feitos somada com o valor da oferta mais alta para um produto ainda não arrematado feita 
-        por um cliente que ainda não comprou nada multiplicado pelo número de produtos que faltam
+    /* 
+    *   Soma de produtos arrematados + oferta máxima para produtos pendentes para cliente disponível * qtd. de produtos pendentes 
+    *
+    *   LaTeX => B(A, P, C) = \sum_{(i, j) \in A} o_{i, j} + |P| \max\{o_{i, j} : i \in P, j \in C\}
     */
     for (const ConjuntoOfertas& ofertas : prods_pend) {
         for (const Oferta& oferta : ofertas) {
@@ -64,9 +65,14 @@ int abey_bound_prof(const Leilao& prods_pend, const int ganho_acumulado, const v
 }
 
 int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, const vector<bool>& selecionados) {
-    int soma_otimos = 0;
+    int soma_maximos = 0;
         
-    /* Para cada produto pendente, **gulosamente** pega a melhor oferta de um cliente disponível */
+    /* 
+    *   Para cada produto pendente com oferta máxima de cliente que não foi selecionado,
+    *   acumula com a soma das ofertas para produtos já arrematados
+    *   
+    *   LaTeX => B(A, P, C) = \sum_{(i, j) \in A} o_{i, j} + \sum_{i = k}^{p} o_{i, c}, c = \max\{x : x \in C\}, k \in P}
+    */
     for (const ConjuntoOfertas& ofertas : prods_pend) {
         int max_disponivel = 0;
 
@@ -75,17 +81,17 @@ int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, cons
                 max_disponivel = max(max_disponivel, oferta.first);
         }
 
-        soma_otimos += max_disponivel;
+        soma_maximos += max_disponivel;
     }
 
-    return ganho_acumulado + soma_otimos;
+    return ganho_acumulado + soma_maximos;
 }
 
 void abey_bnb_max_ganho(
     const Leilao &leilao,
-    int l,
-    int p,
-    int (&bound)(const Leilao&, int, const std::vector<bool>&),
+    const int l,
+    const int p,
+    int (&bound)(const Leilao&, int, const vector<bool>&),
     Otimo& otimo,
     Atual& atual,
     Monitor& monitor,

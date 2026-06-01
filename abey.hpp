@@ -84,8 +84,8 @@ int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, cons
 */
 void abey_bnb_max_ganho(
     const Leilao &leilao,
-    int l,
-    int p,
+    const int l,
+    const int p,
     int (&bound)(const Leilao&, int, const std::vector<bool>& selecionados),
     Otimo& otimo,
     Atual& atual,
