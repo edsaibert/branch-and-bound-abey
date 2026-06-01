@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < p; i++)
         cout << i + 1 << " " << otimo.solucao[i] << "\n";
 
-    cout << otimo.ganho << "\n";
+    cout << otimo.ganho << "\n\n";
 
     /* Relatório em stderr */
     cerr << "Duração: " << monitor.tempo_execucao.count() << "ms\n";
