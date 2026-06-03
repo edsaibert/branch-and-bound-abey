@@ -2,12 +2,10 @@
 #include <iterator>
 #include "abey.hpp"
 
-using namespace std;
-
 /* Cria um conjunto de ofertas (devolve conjunto vazio caso ocorra erro) */
 ConjuntoOfertas abey_cria_ofertas(const int qtd_ofertas) {
     if (qtd_ofertas <= 0) {
-        cerr << "[-] abey_cria_ofertas(): Qtd. inválida de ofertas\n";
+        std::cerr << "[-] abey_cria_ofertas(): Qtd. inválida de ofertas\n";
 
         return {};
     }
@@ -16,7 +14,7 @@ ConjuntoOfertas abey_cria_ofertas(const int qtd_ofertas) {
 
     for (int i = 0; i < qtd_ofertas; i++) {
         int valor;
-        cin >> valor;
+        std::cin >> valor;
 
         ofertas.insert({valor, i + 1});
     }
@@ -26,7 +24,7 @@ ConjuntoOfertas abey_cria_ofertas(const int qtd_ofertas) {
 
 Leilao abey_cria_leilao(const int p, const int c) {
     if (p <= 0 || c <= 0) {
-        cerr << "[-] abey_cria_leilao(): Dimensões de leilão inválidas\n";
+        std::cerr << "[-] abey_cria_leilao(): Dimensões de leilão inválidas\n";
 
         return {};
     }
@@ -45,7 +43,7 @@ Leilao abey_cria_leilao(const int p, const int c) {
     return leilao; 
 }
 
-int abey_bound_prof(const Leilao& prods_pend, const int ganho_acumulado, const vector<bool>& selecionados) {
+int abey_bound_prof(const Leilao& prods_pend, const int ganho_acumulado, const std::vector<bool>& selecionados) {
     int max_prods_pend = 0;
     int tam_prods_pend = prods_pend.size();
 
@@ -57,14 +55,14 @@ int abey_bound_prof(const Leilao& prods_pend, const int ganho_acumulado, const v
     for (const ConjuntoOfertas& ofertas : prods_pend) {
         for (const Oferta& oferta : ofertas) {
             if (!selecionados[oferta.second])
-                max_prods_pend = max(max_prods_pend, oferta.first);
+                max_prods_pend = std::max(max_prods_pend, oferta.first);
         }
     }
 
     return ganho_acumulado + (max_prods_pend * tam_prods_pend);
 }
 
-int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, const vector<bool>& selecionados) {
+int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, const std::vector<bool>& selecionados) {
     int soma_maximos = 0;
         
     /* 
@@ -78,7 +76,7 @@ int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, cons
 
         for (const Oferta& oferta : ofertas) {
             if (!selecionados[oferta.second])
-                max_disponivel = max(max_disponivel, oferta.first);
+                max_disponivel = std::max(max_disponivel, oferta.first);
         }
 
         soma_maximos += max_disponivel;
@@ -91,7 +89,7 @@ void abey_bnb_max_ganho(
     const Leilao &leilao,
     const int l,
     const int p,
-    int (&bound)(const Leilao&, const int, const vector<bool>&),
+    int (&bound)(const Leilao&, const int, const std::vector<bool>&),
     Otimo& otimo,
     Atual& atual,
     Monitor& monitor,
