@@ -48,9 +48,7 @@ int abey_bound_prof(const Leilao& prods_pend, const int ganho_acumulado, const s
     int tam_prods_pend = prods_pend.size();
 
     /* 
-    *   Soma de produtos arrematados + oferta máxima para produtos pendentes para cliente disponível * qtd. de produtos pendentes 
-    *
-    *   LaTeX => B(A, P, C) = \sum_{(i, j) \in A} o_{i, j} + |P| \max\{o_{i, j} : i \in P, j \in C\}
+    *   Ganho acumulado de arremates + (oferta máxima para produtos pendentes para clientes disponíveis * qtd. de produtos pendentes)
     */
     for (const ConjuntoOfertas& ofertas : prods_pend) {
         for (const Oferta& oferta : ofertas) {
@@ -66,10 +64,8 @@ int abey_bound_upgrade(const Leilao& prods_pend, const int ganho_acumulado, cons
     int soma_maximos = 0;
         
     /* 
-    *   Para cada produto pendente com oferta máxima de cliente que não foi selecionado,
-    *   acumula com a soma das ofertas para produtos já arrematados
-    *   
-    *   LaTeX => B(A, P, C) = \sum_{(i, j) \in A} o_{i, j} + \sum_{i = k}^{p} o_{i, c}, c = \max\{x : x \in C\}, k \in P}
+    *   Para cada produto pendente com cliente disponível (viável), soma as ofertas máximas
+    *   para eles e soma com o ganho acumulado de arremates
     */
     for (const ConjuntoOfertas& ofertas : prods_pend) {
         int max_disponivel = 0;
